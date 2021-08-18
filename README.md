@@ -42,7 +42,7 @@ The results of Accuracy_Test-ikNN.py are provided in the Results folder for one 
 | kNN	| 0.659	| 0.107	| 0.003 | 
 | ikNN	| 0.725	| 0.082	| 2.202 | 
 
-[Line Graph](https://github.com/Brett-Kennedy/ikNN/blob/main/Results/results_17_08_2021_17_19_39_plot.png) This plots the accuracy of ikNN against two kNNs, with n_neighbors set to 5 and to 10.
+![Line Graph](https://github.com/Brett-Kennedy/ikNN/blob/main/Results/results_17_08_2021_17_19_39_plot.png) This plots the accuracy of ikNN against two kNNs, with n_neighbors set to 5 and to 10.
 
 
 
