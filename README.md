@@ -30,7 +30,7 @@ scores = cross_validate(clf, X, y, cv=5, scoring='f1_macro', return_train_score=
 One example notebook is provided, [Simple_Example_ikNN](https://github.com/Brett-Kennedy/ikNN/blob/main/examples/Simple_Example_ikNN.ipynb). This provides basic examples using the tool.
 
 ## Example Python Files
-One file is provides to evalutat the overall accuracy of the model. [Accuracy_Test-ikNN](). This uses the [DatasetsEvaluator](https://github.com/Brett-Kennedy/DatasetsEvaluator) tool to compare the performance of ikNNs to standard sklearn kNNs. This measures accuracy only, as the interpretability can not easily be compared, but we believe it is safe to say that visualized 2d spaces are far more interpretable than high-dimensional spaces. 
+One file is provides to evalutat the overall accuracy of the model. [Accuracy_Test-ikNN](https://github.com/Brett-Kennedy/ikNN/blob/main/examples/Accuracy_Test_ikNN.py). This uses the [DatasetsEvaluator](https://github.com/Brett-Kennedy/DatasetsEvaluator) tool to compare the performance of ikNNs to standard sklearn kNNs. This measures accuracy only, as the interpretability can not easily be compared, but we believe it is safe to say that visualized 2d spaces are far more interpretable than high-dimensional spaces. 
 
 ## Results
 
