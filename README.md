@@ -6,6 +6,8 @@ As may be expected, as this is an ensembling approach, the accuracy is, from our
 
 This predictor follows the standard sklearn fit-predict model. Currently only classification is available, with regression in progress. 
 
+ikNN provides, in effect, an ensembling method specific to kNNs, though the general techique is based on weighted voting. Although a straightforward design, testing suggests it can be a quite accurate and interpretable model. 
+
 ## Algorithm
 The model first examines each pair of features and creates a standard 2d kNN using these features and assesses their accuracy with respect to predicting the target column. Given this, the ikNN model determines the predictive power of each 2d subspace. To make a prediction, the 2d subspaces known to be most predictive are used, optionally weighted by their predictive power on the training data. Further, at inference, the purity of the set of neareast neighbors around a given row within each 2d space may be considered, allowing the model to weight more heavily both the subspaces proven to be more predictive with training data and the subspaces that appear to be the most uniform in their prediction with respect to the current row. 
 
@@ -53,6 +55,8 @@ The number of 2d spaces provided for each row explanation is configurable, but i
 
 ## Example Python Files
 One file is provided to evaluate the overall accuracy of the model. [Accuracy_Test-ikNN](https://github.com/Brett-Kennedy/ikNN/blob/main/examples/Accuracy_Test_ikNN.py). This uses the [DatasetsEvaluator](https://github.com/Brett-Kennedy/DatasetsEvaluator) tool to compare the performance of ikNNs to standard sklearn kNNs. This measures accuracy only, as the interpretability can not easily be compared, but we believe it is safe to say that visualized 2d spaces are far more interpretable than high-dimensional spaces. 
+
+Using DatasetsEvaluator provides an unbiased, without cherry-picking, straightforward method to test on a large number of datasets in a repeatable manner. 
 
 ## Results
 
