@@ -54,27 +54,77 @@ The tool provides the option to visualize an explanation for each prediction, as
 The number of 2d spaces provided for each row explanation is configurable, but in most cases only a small number of plots need be and are shown. With datasets with a large number of columns, showing each pair is unmanageable and not useful. Although it is configurable, by default, only five 2d spaces are used by each ikNN. This ensures the prediction times are fast and the visualizations simple, as only this many 2d spaces need be shown. It should be noted, that for most datasets, for most rows, all or almost all 2d spaces agree on the prediction. However, where the predictions are incorrect, it may be useful to examine more 2d plots in order to better tune the hyperparameters to suit the current dataset. 
 
 ## Example Python Files
-One file is provided to evaluate the overall accuracy of the model. [Accuracy_Test-ikNN](https://github.com/Brett-Kennedy/ikNN/blob/main/examples/Accuracy_Test_ikNN.py). This uses the [DatasetsEvaluator](https://github.com/Brett-Kennedy/DatasetsEvaluator) tool to compare the performance of ikNNs to standard sklearn kNNs. This measures accuracy only, as the interpretability can not easily be compared, but we believe it is safe to say that visualized 2d spaces are far more interpretable than high-dimensional spaces. 
+Two files are provided to evaluate the overall accuracy of the model. The first is [Accuracy_Test-ikNN](https://github.com/Brett-Kennedy/ikNN/blob/main/examples/Accuracy_Test_ikNN.py). This uses the [DatasetsEvaluator](https://github.com/Brett-Kennedy/DatasetsEvaluator) tool to compare the performance of ikNNs to standard sklearn kNNs. This measures accuracy only, as the interpretability can not easily be compared, but we believe it is safe to say that visualized 2d spaces are far more interpretable than high-dimensional spaces. This creates 2 sets of output files: 1 given [default parameters](https://github.com/Brett-Kennedy/ikNN/tree/main/Results/Default%20Parameters) and one using a [grid search to determine the best hyperparameters](https://github.com/Brett-Kennedy/ikNN/tree/main/Results/Grid%20Search%20Best%20Parameters)
 
 Using DatasetsEvaluator provides an unbiased, without cherry-picking, straightforward method to test on a large number of datasets in a repeatable manner. 
 
+The second, is [ikNN_with_Arithmetic_Features](https://github.com/Brett-Kennedy/ikNN/blob/main/examples/ikNN_with_Arithmetic_Features.py). This is similar, but tests ikNN in conjunction with [ArithmeticFeatures](https://github.com/Brett-Kennedy/ArithmeticFeatures), a feature engineering tool available on this github channel. The [results](https://github.com/Brett-Kennedy/ikNN/tree/main/Results/With%20Arithimetic%20Features) may be viewed directly; they are also summarized below.  
+
+As ArithmeticFeatures produces interpretable features (simple arithetic operations on pairs of numeric features), the ikNN models produced using these features are still highly, though slightly less, interpretable than ikNN models using only the original features. 
+
 ## Results
 
-The results of Accuracy_Test-ikNN.py are provided in the Results folder for one execution, using 100 random datasets for classification. 
+### Default Parameters
 
+The results of Accuracy_Test-ikNN.py are provided in the Results folder for one execution, using 100 random datasets for classification. Using DatasetsEvaluator, we get 4 output files for each test:
+1. A csv file listing every test (every model type on every dataset).
+2. A csv file summarizing this. This has one row for each model type and aggregate statistics over all datasets
+3. A line plot listing the performance of each model on each dataset. The datasets are listed along the x-axis, with an accuracy score (in this case macro F1 score) on the y-axis. Each line represents one model type. The datasets are ordered from left to right based on the accuracy given the model specified as the baseline against which we compare, in this case a standard kNN with k=5 and all other parameters set to their default value. 
+4. a heatmap indicating how often each model was the top performer in terms of accuracy and interpretability. In the case of kNN and ikNN models, there is no objective measure of interpretability, so this plot simply records how often each model performed the best. 
 
 | Model| 	Avg f1_macro	| Avg. Train-Test Gap	| Avg. Fit Time | 
 | ----- |	----- |	----- |	----- |	
 | kNN	| 0.659	| 0.107	| 0.003 | 
 | ikNN	| 0.725	| 0.082	| 2.202 | 
 
-![Line Graph](https://github.com/Brett-Kennedy/ikNN/blob/main/Results/results_17_08_2021_17_19_39_plot.png) This plots the accuracy of ikNN against two kNNs, with n_neighbors set to 5 and to 10.
+|Model | # Times the Highest Accuracy | 
+| ----- |	----- |
+| kNN(k=5) | 19 |
+| kNN(k=10)| 23 | 
+| ikNN | 58 | 
 
-Here, the blue line represents the accuracy of the ikNN, while the orange and green lines represent the accuracy of standard kNN's, with k=5 and 10. Otherwise, default parameters are used in all 3 models. The accuracy of the ikNN can be seen to be very competitive with standard kNNs, and typically significantly higher.
+![Line Graph](https://github.com/Brett-Kennedy/ikNN/blob/main/Results/Default%20Parameters/results_22_09_2021_13_24_04_plot.png) This plots the accuracy of ikNN against two kNNs, with n_neighbors set to 5 and to 10.
+
+Here, the green line represents the accuracy of the ikNN, while the orange and blue lines represent the accuracy of standard kNN's, with k=5 and 10. Otherwise, default parameters are used in all 3 models. The accuracy of the ikNN can be seen to be very competitive with standard kNNs, and typically significantly higher.
 
 It should be noted, ikNN's are somewhat slower than standard kNNs, though still fitting and predicting within seconds, and as such, still compare favourably to many other models, particularly other ensembled models and deep neural networks with regards to time. 
 
 Note as well, the gap between the train and test scores is, on average, smaller for ikNN than kNN models, suggesting ikNN's are more stable, as is expected from an ensemble model.
 
+### Using CV Grid Search to Identify the Best Hyperparameters
+
+| Model| 	Avg f1_macro	| Avg. Train-Test Gap	|
+| ----- |	----- |	----- |	----- |	
+| kNN	| 0.685	| 0.076	| 
+| ikNN	| 0.775	|0.083 |
+
+|Model | # Times the Highest Accuracy | 
+| ----- |	----- |
+| kNN | 24 |
+| ikNN | 76 | 
+
+![Line Graph](https://github.com/Brett-Kennedy/ikNN/blob/main/Results/Grid%20Search%20Best%20Parameters/results_21_09_2021_18_52_32_plot.png)
+Here, again, we see ikNN significantly outperforming standard kNNs. Note, however, with kNNs, this experiment tuned only the value of k, while with ikNN models, we tuned 3 additional hyperparameters: method, weight_by_score, and max_spaces_tested. It should be noted, all four hyperparameters tuned for ikNN's frequently selected all values made possible. While ikNNs have sensible values for these set by default, tuning may be beneficial. It also appears that ikNNs are less sensitive to the value of k selected, though analysis of this is ongoing.
 
 
+
+### Tesing with ArithmeticFeatures
+
+| Model| 	Features | Avg f1_macro	| Avg. Train-Test Gap	| Avg. Fit Time | 
+| ----- |	----- |	----- | ----- |	----- |	
+|kNN	|Original Features	|0.660	|0.126 |	0.006 |
+|kNN	|Arithmetic-based Features	|0.634 |	0.134 |	13.813|
+|ikNN	|Original Features	|0.721 |	0.0798 |	3.802 |
+|ikNN	|Arithmetic-based Features	|0.745|	0.083|	80.489|
+
+
+|Model | Features | # Times the Highest Accuracy | 
+| ----- |	----- |	----- |
+|kNN | Original  | 20 |
+|kNN | Original + Arithmetic  | 13 |
+|ikNN | Original  | 12 |
+|ikNN | Original + Arithmetic  | 55 |
+
+![Line Graph](https://github.com/Brett-Kennedy/ikNN/blob/main/Results/With%20Arithimetic%20Features/results_21_09_2021_16_42_21_plot.png)
+
+Interestingly, though the use of ArithmeticFeatures tended to lower the accuracy of standard kNN models, it tended to raise the accuracy of ikNN models, making them even stronger models. 
