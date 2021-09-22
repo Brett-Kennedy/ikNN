@@ -94,7 +94,7 @@ Note as well, the gap between the train and test scores is, on average, smaller 
 ### Using CV Grid Search to Identify the Best Hyperparameters
 
 | Model| 	Avg f1_macro	| Avg. Train-Test Gap	|
-| ----- |	----- |	----- |	----- |	
+| ----- |	----- |	----- |	
 | kNN	| 0.685	| 0.076	| 
 | ikNN	| 0.775	|0.083 |
 
@@ -127,4 +127,98 @@ Here, again, we see ikNN significantly outperforming standard kNNs. Note, howeve
 
 ![Line Graph](https://github.com/Brett-Kennedy/ikNN/blob/main/Results/With%20Arithimetic%20Features/results_21_09_2021_16_42_21_plot.png)
 
-Interestingly, though the use of ArithmeticFeatures tended to lower the accuracy of standard kNN models, it tended to raise the accuracy of ikNN models, making them even stronger models. 
+Here, the blue and orange lines represent kNNs and green and red ikNNs. Interestingly, though the use of ArithmeticFeatures tended to lower the accuracy of standard kNN models, it tended to raise the accuracy of ikNN models, making them even stronger models. With ikNNs, we see the opposite behaviour, with the red line tending to follow the shape of the greeen, but slightly higher, indicating higher accuracy.
+
+
+## Methods
+
+### ikNNClassifier()
+
+```
+iknn = ikNNClassifier(n_neighbors=15, 
+                      method='simple majority', 
+                      weight_by_score=True, 
+                      max_spaces_tested=500, 
+                      num_best_spaces=6)
+```
+#### Parameters
+
+**n_neighbors**: int
+
+The number of neighbors each rows is compared to. 
+
+**method**: str
+            
+Must be 'simple majority' or 'use proba'. How the predictions are determined is based on this and 
+weight_by_score. If the method is 'simple majority', each kNN used in the predictions simply predicts the 
+majority within n_neighbors. If the method is 'use proba', each kNNs prediction is a distribution of
+            predictions, weighted by their purity in the range of n_neighbors.  
+
+**weight_by_score**: bool
+If True, the kNNs used for each prediction will be weighted by their accuracy on the training set. 
+
+**max_spaces_tested**: int
+This may be set to control the time required for fitting where the dataset has a large number of columns. If 
+            the number of pairs of numeric columns is greater than this, a subset will be used based on their accuracy
+            as 1d kNN models. 
+
+**num_best_spaces**: int
+The number of 2d kNN's used for predictions. If -1, a kNN will be created for every pair of columns.
+
+##
+
+### Fit
+```
+iknn.fit(X,y)
+```
+
+Fit the k-nearest neighbors classifier from the training dataset. This creates a set of sklearn
+        KNeighborsClassifier classifiers that are later ensembled to make predictions and visualized to present
+        explanations.
+
+#### Parameters
+**X**: 2d array-like of shape (n_samples, n_features)
+
+**y**: array-like of shape (n_samples)
+   
+##
+
+### Predict 
+
+```
+y_pred = iknn.predict(X)
+```
+
+Predict the class labels for the provided data.
+   
+##
+
+### graph_2d_spaces
+
+```
+graph_2d_spaces(row, row_idx, true_class, num_spaces_shown=-1)   
+```
+
+Presents a visualization for the fit model. The visualization consists of a set of plots for the row
+        specified, where each plot represents one 2d space. The number of 2d spaces may be specified. The 2d spaces
+        that are the most predictive, as measured on the train set, will be shown.
+
+#### Parameters
+       
+**row**: pandas series
+
+The row for which we want to show the predictions. The row will be shown as a red star in each 2d space.
+
+**row_idx**: int
+
+The index in the test set of row.
+
+**true_class**: int
+
+The index of the true class in y
+
+**num_spaces_shown**: int
+
+The number of 2d spaces plotted
+
+
