@@ -20,6 +20,8 @@ As with standard kNN's, any categorical columns must be numerically encoded.
 `
 pip install ikNN
 `
+It is also possible to do a git clone. Only the interpretable_knn.py is necessary to use the model. 
+
 
 ## Examples
 
@@ -79,8 +81,8 @@ The results of Accuracy_Test-ikNN.py are provided in the Results folder for one 
 
 |Model | # Times the Highest Accuracy | 
 | ----- |	----- |
-| kNN(k=5) | 19 |
-| kNN(k=10)| 23 | 
+| kNN (k=5) | 19 |
+| kNN (k=10)| 23 | 
 | ikNN | 58 | 
 
 ![Line Graph](https://github.com/Brett-Kennedy/ikNN/blob/main/Results/Default%20Parameters/results_22_09_2021_13_24_04_plot.png) This plots the accuracy of ikNN against two kNNs, with n_neighbors set to 5 and to 10.
