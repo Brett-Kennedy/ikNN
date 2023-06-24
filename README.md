@@ -4,12 +4,12 @@ An sklearn-compatable predictor that aggregates predictions from the set of all 
 
 As may be expected, as this is an ensembling approach, the accuracy is, from our testing to date, higher than that of standard kNN models. But, despite being an ensembling approach, which typically preclude interpretability, this allows full global and local explanations, that is, descriptions of the overall model as well as explanations of individual predictions.  
 
-This predictor follows the standard sklearn fit-predict model. Currently only classification is available, with regression in progress. 
+This predictor follows the standard sklearn fit-predict model. Currently only classification is available, with regression in future versions. 
 
 ikNN provides, in effect, an ensembling method specific to kNNs, though the general techique is based on weighted voting. Although a straightforward design, testing suggests it can be a quite accurate and interpretable model. 
 
 ## Algorithm
-The model first examines each pair of features and creates a standard 2d kNN using these features and assesses their accuracy with respect to predicting the target column. Given this, the ikNN model determines the predictive power of each 2d subspace. To make a prediction, the 2d subspaces known to be most predictive are used, optionally weighted by their predictive power on the training data. Further, at inference, the purity of the set of neareast neighbors around a given row within each 2d space may be considered, allowing the model to weight more heavily both the subspaces proven to be more predictive with training data and the subspaces that appear to be the most uniform in their prediction with respect to the current row. 
+The model first examines each pair of features and creates a standard 2d kNN using these features and assesses their accuracy with respect to predicting the target column using the training data. Given this, the ikNN model determines the predictive power of each 2d subspace. To make a prediction, the 2d subspaces known to be most predictive are used, optionally weighted by their predictive power on the training data. Further, at inference, the purity of the set of neareast neighbors around a given row within each 2d space may be considered, allowing the model to weight more heavily both the subspaces proven to be more predictive with training data and the subspaces that appear to be the most uniform in their prediction with respect to the current instance. 
 
 This approach allows the model to consider the influence all input features, but weigh them in a manner that magnifies the influence of more predictive features, and diminishes the influence of less-predictive features. 
 
@@ -20,7 +20,7 @@ As with standard kNN's, any categorical columns must be numerically encoded.
 `
 pip install ikNN
 `
-It is also possible to do a git clone. Only the interpretable_knn.py is necessary to use the model. 
+It is also possible to do a git clone. Only the interpretable_knn.py file is necessary to use the model. 
 
 
 ## Examples
@@ -58,9 +58,9 @@ The number of 2d spaces provided for each row explanation is configurable, but i
 ## Example Python Files
 Two files are provided to evaluate the overall accuracy of the model. The first is [Accuracy_Test-ikNN](https://github.com/Brett-Kennedy/ikNN/blob/main/examples/Accuracy_Test_ikNN.py). This uses the [DatasetsEvaluator](https://github.com/Brett-Kennedy/DatasetsEvaluator) tool to compare the performance of ikNNs to standard sklearn kNNs. This measures accuracy only, as the interpretability can not easily be compared, but we believe it is safe to say that visualized 2d spaces are far more interpretable than high-dimensional spaces. This creates 2 sets of output files: 1 given [default parameters](https://github.com/Brett-Kennedy/ikNN/tree/main/Results/Default%20Parameters) and one using a [grid search to determine the best hyperparameters](https://github.com/Brett-Kennedy/ikNN/tree/main/Results/Grid%20Search%20Best%20Parameters)
 
-Using DatasetsEvaluator provides an unbiased, without cherry-picking, straightforward method to test on a large number of datasets in a repeatable manner. 
+Using DatasetsEvaluator provides an unbiased (as the datasets selected are selected randomly) and straightforward method to test on a large number of datasets in a repeatable manner. 
 
-The second, is [ikNN_with_Arithmetic_Features](https://github.com/Brett-Kennedy/ikNN/blob/main/examples/ikNN_with_Arithmetic_Features.py). This is similar, but tests ikNN in conjunction with [ArithmeticFeatures](https://github.com/Brett-Kennedy/ArithmeticFeatures), a feature engineering tool available on this github channel. The [results](https://github.com/Brett-Kennedy/ikNN/tree/main/Results/With%20Arithimetic%20Features) may be viewed directly; they are also summarized below.  
+The second, is [ikNN_with_Arithmetic_Features](https://github.com/Brett-Kennedy/ikNN/blob/main/examples/ikNN_with_Arithmetic_Features.py). This is similar, but tests ikNN in conjunction with [ArithmeticFeatures](https://github.com/Brett-Kennedy/ArithmeticFeatures), a feature engineering tool available on this github site. The [results](https://github.com/Brett-Kennedy/ikNN/tree/main/Results/With%20Arithimetic%20Features) may be viewed directly; they are also summarized below.  
 
 As ArithmeticFeatures produces interpretable features (simple arithetic operations on pairs of numeric features), the ikNN models produced using these features are still highly, though slightly less, interpretable than ikNN models using only the original features. 
 
@@ -89,7 +89,7 @@ The results of Accuracy_Test-ikNN.py are provided in the Results folder for one 
 
 Here, the green line represents the accuracy of the ikNN, while the orange and blue lines represent the accuracy of standard kNN's, with k=5 and 10. Otherwise, default parameters are used in all 3 models. The accuracy of the ikNN can be seen to be very competitive with standard kNNs, and typically significantly higher.
 
-It should be noted, ikNN's are somewhat slower than standard kNNs, though still fitting and predicting within seconds, and as such, still compare favourably to many other models, particularly other ensembled models and deep neural networks with regards to time. 
+It should be noted, ikNN's are somewhat slower than standard kNNs, though still fitting and predicting within seconds, and as such, still compare favourably to many other models, particularly other ensembled models and neural networks with regards to time. 
 
 Note as well, the gap between the train and test scores is, on average, smaller for ikNN than kNN models, suggesting ikNN's are more stable, as is expected from an ensemble model.
 
@@ -131,6 +131,7 @@ Here, again, we see ikNN significantly outperforming standard kNNs. Note, howeve
 
 Here, the blue and orange lines represent kNNs and green and red ikNNs. Interestingly, though the use of ArithmeticFeatures tended to lower the accuracy of standard kNN models, it tended to raise the accuracy of ikNN models, making them even stronger models. With ikNNs, we see the opposite behaviour, with the red line tending to follow the shape of the greeen, but slightly higher, indicating higher accuracy.
 
+While the use of ArithmeticFeatures can lead to overfitting in some contexts, as it generates a large number of features, ikNN is able to take advantage of these features well. In general, ikNN is able to absorb engineered features well, an artifact of its use of simple, 2d spaces, where one or both features may be engineered. 
 
 ## Methods
 
