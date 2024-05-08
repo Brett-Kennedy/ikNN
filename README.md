@@ -17,11 +17,7 @@ As with standard kNN's, any categorical columns must be numerically encoded.
 
 ## Installation
 
-`
-pip install ikNN
-`
-
-It is also possible to do a git clone. Only the interpretable_knn.py file is necessary to use the model. 
+The tool requires only the interpretable_knn.py file. This may be downloaded and included in any project.
 
 
 ## Examples
