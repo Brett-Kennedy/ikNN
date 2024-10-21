@@ -1,6 +1,6 @@
 # ikNN
 
-An sklearn-compatable predictor that aggregates predictions from the set of all 2d numeric subspaces within a dataset, using a standard kNN algoritm within each 2d space.  The model is named *ikNN* as it is an interpreretable form of kNN. The interpretability derives from the fact that the set of 2d spaces are each visualizable, providing a full explanation based on the training data. 
+A scikit-learn-compatible predictor that aggregates predictions from the set of all 2d numeric subspaces within a dataset, using a standard kNN algoritm within each 2d space.  The model is named *ikNN* as it is an interpreretable form of kNN. The interpretability derives from the fact that the set of 2d spaces are each visualizable, providing a full explanation based on the training data. 
 
 As may be expected, as this is an ensembling approach, the accuracy is, from our testing to date, higher than that of standard kNN models. But, despite being an ensembling approach, which typically preclude interpretability, this allows full global and local explanations, that is, descriptions of the overall model as well as explanations of individual predictions.  
 
